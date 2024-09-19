@@ -19,6 +19,7 @@ limitations under the License.
 #include <array>
 #include <cstdint>
 #include <functional>
+#include <limits>
 #include <memory>
 #include <new>
 #include <optional>
@@ -788,7 +789,8 @@ absl::Status RunOptimizationPasses(
     pipeline.AddPass<DotDecomposer>();
     // Only merge "smallish" dots.  This threshold was not set carefully, but
     // so far we know that 1mb is too small.
-    pipeline.AddPass<DotMerger>(/*max_size_to_merge=*/int64_t{32} << 20);
+    pipeline.AddPass<DotMerger>(
+      /*max_size_to_merge=*/std::numeric_limits<int64_t>::max());
     pipeline.AddPass<SortSimplifier>();
     pipeline.AddPass<TupleSimplifier>();
     pipeline.AddPass<WhileLoopConstantSinking>();
